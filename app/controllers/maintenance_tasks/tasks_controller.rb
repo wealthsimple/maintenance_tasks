@@ -10,17 +10,13 @@ module MaintenanceTasks
     before_action :set_refresh, only: [:index]
 
     # Renders the maintenance_tasks/tasks page, displaying
-    # available tasks to users, grouped by category.
+    # available tasks to users, grouped by category, and
+    # if query parameter is provided, filters results
     def index
-      @available_tasks = TaskDataIndex.available_tasks.group_by(&:category)
-    end
-
-    def search
-      if params[:search].blank?
-        redirect_to tasks_path and return
+      if params[:query].blank?
+        @available_tasks = TaskDataIndex.available_tasks.group_by(&:category)
       else
-        @parameter = params[:search].downcase
-        @available_tasks = TaskDataIndex.available_tasks.select { |task| task.name.downcase.include? "#{@parameter}" }.group_by(&:category)
+        @available_tasks = TaskDataIndex.available_tasks.select { |task| task.name.downcase.include? "#{params[:query].strip.downcase}" }.group_by(&:category)
       end
     end
 
