@@ -12,7 +12,8 @@ module MaintenanceTasks
     # Renders the maintenance_tasks/tasks page, displaying
     # available tasks to users, grouped by category.
     def index
-      @available_tasks = TaskDataIndex.available_tasks.group_by(&:category)
+      @archived = ActiveRecord::Type::Boolean.new.cast(params[:archived])
+      @available_tasks = TaskDataIndex.available_tasks(@archived).group_by(&:category)
     end
 
     # Renders the page responsible for providing Task actions to users.

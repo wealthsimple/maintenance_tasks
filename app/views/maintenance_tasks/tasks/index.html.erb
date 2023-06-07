@@ -8,6 +8,9 @@
       </p>
     </div>
   <% else %>
+    <div class="block">
+      <%= button_to "#{@archived ? "Hide" : "Show"} Archived", root_path , method: :get, params: { archived: !@archived }, class: "button is-dark" %>
+    </div>
     <% if active_tasks = @available_tasks[:active] %>
       <h3 class="title is-3">Active Tasks</h3>
       <%= render partial: 'task', collection: active_tasks %>

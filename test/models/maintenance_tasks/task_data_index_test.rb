@@ -4,7 +4,30 @@ require "test_helper"
 
 module MaintenanceTasks
   class TaskDataIndexTest < ActiveSupport::TestCase
-    test ".available_tasks returns a list of Tasks as TaskDataShow, ordered alphabetically by name" do
+    test ".available_tasks returns a list of Tasks as TaskDataShow, ordered alphabetically by name excluding archived tasks" do
+      expected = [
+        "Maintenance::BatchImportPostsTask",
+        "Maintenance::CallbackTestTask",
+        "Maintenance::CancelledEnqueueTask",
+        "Maintenance::EnqueueErrorTask",
+        "Maintenance::ErrorTask",
+        "Maintenance::ImportPostsTask",
+        "Maintenance::Nested::NestedMore::NestedMoreTask",
+        "Maintenance::Nested::NestedTask",
+        "Maintenance::NoCollectionTask",
+        # duplicate due to fixtures containing two active runs of this task
+        "Maintenance::NoCollectionTask",
+        "Maintenance::ParamsTask",
+        "Maintenance::TestTask",
+        "Maintenance::UpdatePostsInBatchesTask",
+        "Maintenance::UpdatePostsModulePrependedTask",
+        "Maintenance::UpdatePostsTask",
+        "Maintenance::UpdatePostsThrottledTask",
+      ]
+      assert_equal expected, TaskDataIndex.available_tasks.map(&:name)
+    end
+
+    test ".available_tasks returns a list of Tasks as TaskDataShow, ordered alphabetically by name including archived tasks" do
       expected = [
         "Maintenance::ArchivedTask",
         "Maintenance::BatchImportPostsTask",
@@ -25,7 +48,7 @@ module MaintenanceTasks
         "Maintenance::UpdatePostsTask",
         "Maintenance::UpdatePostsThrottledTask",
       ]
-      assert_equal expected, TaskDataIndex.available_tasks.map(&:name)
+      assert_equal expected, TaskDataIndex.available_tasks(true).map(&:name)
     end
 
     test "#new sets last_run if one is passed as an argument" do

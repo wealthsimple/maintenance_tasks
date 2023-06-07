@@ -58,6 +58,7 @@ module MaintenanceTasks
     # attached.
     #
     # @param status [String] the status for the Run.
+    # @param size [Symbol] the size of the tag.
     # @return [String] the span element containing the status, with the
     #   appropriate tag class attached.
     def status_tag(status, size = :normal)
