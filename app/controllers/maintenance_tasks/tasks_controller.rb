@@ -10,10 +10,16 @@ module MaintenanceTasks
     before_action :set_refresh, only: [:index]
 
     # Renders the maintenance_tasks/tasks page, displaying
-    # available tasks to users, grouped by category.
+    # available tasks to users, grouped by category, and
+    # if query parameter is provided, filters results
     def index
       @archived = ActiveRecord::Type::Boolean.new.cast(params[:archived])
-      @available_tasks = TaskDataIndex.available_tasks(@archived).group_by(&:category)
+
+      if params[:query].blank?
+        @available_tasks = TaskDataIndex.available_tasks(@archived).group_by(&:category)
+      else
+        @available_tasks = TaskDataIndex.available_tasks(@archived).select { |task| task.name.downcase.include? "#{params[:query].strip.downcase}" }.group_by(&:category)
+      end
     end
 
     # Renders the page responsible for providing Task actions to users.
