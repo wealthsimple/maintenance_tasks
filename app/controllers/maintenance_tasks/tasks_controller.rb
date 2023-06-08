@@ -13,11 +13,16 @@ module MaintenanceTasks
     # available tasks to users, grouped by category, and
     # if query parameter is provided, filters results
     def index
+
       if params[:query].blank?
         @available_tasks = TaskDataIndex.available_tasks.group_by(&:category)
       else
         @available_tasks = TaskDataIndex.available_tasks.select { |task| task.name.downcase.include? "#{params[:query].strip.downcase}" }.group_by(&:category)
       end
+
+#       @archived = ActiveRecord::Type::Boolean.new.cast(params[:archived])
+#       @available_tasks = TaskDataIndex.available_tasks(@archived).group_by(&:category)
+
     end
 
     # Renders the page responsible for providing Task actions to users.
