@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 MaintenanceTasks::Engine.routes.draw do
-  get 'search', to: "tasks#index"
   resources :tasks, only: [:index, :show], format: false do
     resources :runs, only: [:create], format: false do
       member do
