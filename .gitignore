@@ -1,5 +1,6 @@
 .bundle/
 .yardoc/
+.idea/
 doc/
 gemfiles/*.gemfile.lock
 log/*.log

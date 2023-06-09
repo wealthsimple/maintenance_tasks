@@ -120,6 +120,27 @@ module MaintenanceTasks
         form_builder.time_field(parameter_name)
       when ActiveModel::Type::Boolean
         form_builder.check_box(parameter_name)
+      when SelectType
+        params = form_builder.object.attributes[parameter_name]
+        description = form_builder.label(parameter_name, params.description)
+        options = form_builder.select(
+          parameter_name,
+          params.values,
+          { selected: params.values[params.initial] },
+        )
+        new_line = tag.br
+        tag.div(description + new_line + options)
+      when MultiSelectType
+        params = form_builder.object.attributes[parameter_name]
+        description = form_builder.label(parameter_name, params.description)
+        options = form_builder.select(
+          parameter_name,
+          params.values,
+          { selected: params.values[params.initial], include_blank: false },
+          { multiple: true },
+        )
+        new_line = tag.br
+        tag.div(description + new_line + options)
       else
         form_builder.text_area(parameter_name, class: "textarea")
       end

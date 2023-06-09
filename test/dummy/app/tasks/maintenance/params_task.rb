@@ -2,11 +2,23 @@
 
 module Maintenance
   class ParamsTask < MaintenanceTasks::Task
+    attribute :select_option, :select, default: {
+      values: %w[OptionA OptionB OptionC],
+      initial: 1,
+      description: "Choose one option"
+    }
+
+    attribute :select_multi_options, :multi_select, default: {
+      values: Array.new(100) {|i| "Option #{i + 1}" },
+      initial: 30,
+      description: "Choose few from these options"
+    }
+
     attribute :post_ids, :string
 
     validates :post_ids,
-      presence: true,
-      format: { with: /\A(\s?\d+(,\s?\d+\s?)*)\z/, allow_blank: true }
+              presence: true,
+              format: { with: /\A(\s?\d+(,\s?\d+\s?)*)\z/, allow_blank: true }
 
     attribute :content, :string, default: "default content"
     attribute :integer_attr, :integer, default: 111_222_333
